@@ -13,8 +13,6 @@ var windowHalfY = window.innerHeight / 2;
 var objFileNames = ['MA_Arbol', 'MA_Flor', 'Piedra1', 'Monumento3-1', 'Monumento4', 'Piedra1'];
 var objID = 0;
 
-var object;
-
 init();
 animate();
 
@@ -49,7 +47,7 @@ function init() {
 	function loadNextFile(){
 		if(objID >= objFileNames.length) return;
 
-		loader.load(`../models/${objFileNames[objID]}.gltf`, function(o){
+		loader.load(`./models/${objFileNames[objID]}.gltf`, function(o){
 			let obj = o.scene;
 			// obj.traverse(function(child){
 			// 	if(child.isMesh) child.material.map = texture;
