@@ -58,6 +58,7 @@ function init() {
 			obj.scale.x = 1.2;
 			obj.scale.y = 1.2;
 			obj.scale.z = 1.2;
+			obj.rotation.x = -1.57;
 
 			scene.add(obj);
 
@@ -115,16 +116,16 @@ var t = 0;
 var r = 250;
 var xdelta = 0;
 var zdelta = 0;
+
 function render() {
 
-	t += 0.01;
+	// t += 0.01;
 
-	xdelta = r * Math.cos(t);
-	zdelta = r * Math.sin(t);
-	camera.position.x = xdelta
-	camera.position.z = zdelta
-	camera.position.y += ( - mouseY - camera.position.y ) * .05;
-	r = Math.abs(500 - mouseY);
+	// xdelta = r * Math.cos(t);
+	// zdelta = r * Math.sin(t);
+	camera.position.x = r * Math.cos(mouseX * 0.05);
+	camera.position.z = r * Math.sin(mouseX * 0.05);
+	camera.position.y = (-mouseY + windowHalfY);
 	camera.lookAt( scene.position );
 
 	renderer.render( scene, camera );
