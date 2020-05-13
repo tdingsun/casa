@@ -35,14 +35,17 @@ function init() {
 	scene.background = new THREE.Color( 0x6495ed );
 
 	//lights
-	var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
+	var ambientLight = new THREE.AmbientLight( 0xffffff, 0.4 );
 	scene.add( ambientLight );
 
 	var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
 	camera.add( pointLight );
 	scene.add( camera );
 
+	//texture
+	var texture = new THREE.TextureLoader().load("./textures/colors.png");
 	//model
+
 
 	var loader = new GLTFLoader();
 	// loader.load('../models/MA_Arbol.obj', function(obj){
@@ -54,9 +57,13 @@ function init() {
 
 		loader.load(`./models/${objFileNames[objID]}.gltf`, function(o){
 			let obj = o.scene;
-			// obj.traverse(function(child){
-			// 	if(child.isMesh) child.material.map = texture;
-			// });
+			obj.traverse(function(child){
+				if(child.isMesh){
+					child.material.map = texture;
+					child.material.side = THREE.DoubleSide;
+				} 
+
+			});
 
 			obj.position.x = Math.random() * 200 - 100;
 			obj.position.y = Math.random() * 200 - 100;
@@ -87,7 +94,7 @@ function init() {
 	// controls = new OrbitControls(camera, renderer.domElement);
 	controls = new FirstPersonControls(camera, renderer.domElement);
 	controls.movementSpeed = 150;
-	controls.lookSpeed = 0.1;
+	controls.lookSpeed = 0.07;
 	// controls.addEventListener('change', render);
 	// controls.enableDamping = true;
 	// controls.dampingFactor = 0.05;
@@ -115,7 +122,6 @@ function onWindowResize() {
 
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	controls.handleResize();
-
 }
 
 function onDocumentMouseMove( event ) {
