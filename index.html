@@ -7,7 +7,9 @@
         <script
           src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
           integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-          crossorigin="anonymous"></script>
+		  crossorigin="anonymous"></script>
+		<script src="js/StartAudioContext.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.0.1/Tone.min.js"></script>
         <link rel="stylesheet" href="./styles.css">
 		<title>My first three.js app</title>
 		<style>
@@ -17,8 +19,11 @@
 	</head>
 	<body>
 		<div id="container"></div>
-		<!-- <script type="module" src="js/three.js"></script> -->
-		<script type="module" src="js/GLTFLoader.js"></script>
+		<div id="play-btn">
+			<svg class="bi bi-play-fill" width="100px" height="100px" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+				<path d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 010 1.393z"/>
+			  </svg>
+		</div>
 		<script type="module" src="js/script.js"></script>
 		<script type="module" src="js/text.js"></script>
 	</body>

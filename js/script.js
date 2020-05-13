@@ -2,9 +2,10 @@ import * as THREE from "./three.module.js";
 import { OBJLoader } from "./OBJLoader.js";
 import { GLTFLoader } from "./GLTFLoader.js";
 import { OrbitControls } from "./OrbitControls.js";
+import { FirstPersonControls } from "./FirstPersonControls.js";
 
 var container;
-var camera, scene, renderer;
+var camera, controls, scene, renderer;
 
 var mouseX = 0, mouseY = 0;
 
@@ -13,7 +14,11 @@ var windowHalfY = window.innerHeight / 2;
 var objFileNames = ['MA_Arbol', 'MA_Flor', 'Piedra1', 'Monumento3-1', 'Monumento4', 'Piedra1'];
 var objID = 0;
 
+var clock = new THREE.Clock();
+
+
 init();
+// render();
 animate();
 
 function init() {
@@ -55,14 +60,13 @@ function init() {
 
 			obj.position.x = Math.random() * 200 - 100;
 			obj.position.y = Math.random() * 200 - 100;
-			obj.scale.x = 1.2;
-			obj.scale.y = 1.2;
-			obj.scale.z = 1.2;
+			obj.scale.set(10, 10, 10);
 			obj.rotation.x = -1.57;
 
 			scene.add(obj);
 
 			objID += 1;
+			render();
 			loadNextFile();
 
 		});
@@ -79,6 +83,23 @@ function init() {
 
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
+	//controls
+	// controls = new OrbitControls(camera, renderer.domElement);
+	controls = new FirstPersonControls(camera, renderer.domElement);
+	controls.movementSpeed = 150;
+	controls.lookSpeed = 0.1;
+	// controls.addEventListener('change', render);
+	// controls.enableDamping = true;
+	// controls.dampingFactor = 0.05;
+	// controls.screenSpacePanning = true;
+	// controls.keyPanSpeed = 20;
+
+	controls.minDistance = 50;
+	controls.maxDistance = 1000;
+
+	controls.maxPolarAngle = Math.PI;
+
+
 	//window resize
 
 	window.addEventListener( 'resize', onWindowResize, false );
@@ -93,6 +114,7 @@ function onWindowResize() {
 	camera.updateProjectionMatrix();
 
 	renderer.setSize( window.innerWidth, window.innerHeight );
+	controls.handleResize();
 
 }
 
@@ -108,6 +130,7 @@ function onDocumentMouseMove( event ) {
 function animate() {
 
 	requestAnimationFrame( animate );
+	// controls.update();
 	render();
 
 }
@@ -123,11 +146,11 @@ function render() {
 
 	// xdelta = r * Math.cos(t);
 	// zdelta = r * Math.sin(t);
-	camera.position.x = r * Math.cos(mouseX * 0.05);
-	camera.position.z = r * Math.sin(mouseX * 0.05);
-	camera.position.y = (-mouseY + windowHalfY);
-	camera.lookAt( scene.position );
-
+	// camera.position.x = r * Math.cos(mouseX * 0.05);
+	// camera.position.z = r * Math.sin(mouseX * 0.05);
+	// camera.position.y = (-mouseY + windowHalfY);
+	// camera.lookAt( scene.position );
+	controls.update( clock.getDelta() );
 	renderer.render( scene, camera );
 
 }

@@ -6,6 +6,16 @@
     position: fixed;
     align-content: space-evenly;
     margin: 0 0 0 0.5px;
+    pointer-events: none;
+}
+
+#play-btn {
+    width: 100px;
+    height: 100px;
+    position: fixed;
+    color: yellow;
+    top: calc(50vh - 50px);
+    left: calc(50vw - 50px);
 }
 
 .word {
