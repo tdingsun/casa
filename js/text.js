@@ -8,9 +8,9 @@ var numBoxes = 0;
 var c = 0;
 var speed = 500;
 
-var volume = new Tone.Volume(-6);
+var volume = new Tone.Volume(-27);
 var synth = new Tone.PolySynth(7, Tone.Synth).chain(volume, Tone.Master);
-var notes = Tone.Frequency("C3").harmonize([0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24, 26, 28, 31, 33, 36]);
+var notes = Tone.Frequency("G2").harmonize([0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24]);
 var player = new Tone.Player("./audio.mp3").toMaster();
 
 StartAudioContext(Tone.context, window);  
@@ -18,7 +18,9 @@ $('#play-btn').click(function(){
     if(player.loaded){
         Tone.context.resume();
         player.start();
-        t = setTimeout(displayText, speed);
+        setTimeout(() => {
+            t = setTimeout(displayText, speed);
+        }, 4000);
         $('#play-btn').hide();
     }
 
@@ -30,6 +32,9 @@ $(document).ready(function(){
 });
 
 function displayText(){
+    let noteID = Math.floor(Math.random() * notes.length);
+    synth.triggerAttackRelease(notes[noteID], "1n");
+
     $(`#box-${c % numBoxes}`).addClass("active");
     $(`#box-${(c-1) % numBoxes}`).removeClass("active");
     let word = text_array[c];
