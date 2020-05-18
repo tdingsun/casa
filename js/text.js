@@ -18,18 +18,18 @@ $('#play-btn').click(function(){
     if(player.loaded){
         Tone.context.resume();
         player.start();
-        setTimeout(() => {
-            t = setTimeout(displayText, speed);
-        }, 4000);
+        // setTimeout(() => {
+        //     t = setTimeout(displayText, speed);
+        // }, 4000);
         $('#play-btn').hide();
     }
 
 });
 
 
-$(document).ready(function(){
-    makeDivs();
-});
+// $(document).ready(function(){
+//     makeDivs();
+// });
 
 function displayText(){
     let noteID = Math.floor(Math.random() * notes.length);

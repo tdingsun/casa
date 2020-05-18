@@ -6,12 +6,15 @@ import { FirstPersonControls } from "./FirstPersonControls.js";
 
 var container;
 var camera, controls, scene, renderer;
+var material;
 
 var mouseX = 0, mouseY = 0;
 
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
-var objFileNames = ['MA_Arbol', 'MA_Flor', 'Piedra1', 'Monumento3-1', 'Monumento4', 'Piedra1'];
+// var objFileNames = ['MA_Arbol', 'MA_Flor', 'Piedra1', 'Monumento3-1', 'Monumento4', 'Piedra1'];
+var objFileNames = ['MA_Arbol'];
+
 var objID = 0;
 
 var clock = new THREE.Clock();
@@ -32,19 +35,27 @@ function init() {
 	//scene
 
 	scene = new THREE.Scene();
-	scene.background = new THREE.Color( 0x6495ed );
+	scene.background = new THREE.Color( 0xeeeeee );
 
 	//lights
-	var ambientLight = new THREE.AmbientLight( 0xffffff, 0.4 );
+	var ambientLight = new THREE.AmbientLight( 0xeeeeee, 0.5 );
 	scene.add( ambientLight );
 
-	var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
+	var pointLight = new THREE.PointLight( 0xeeeeee, 0.5 );
 	camera.add( pointLight );
 	scene.add( camera );
 
 	//texture
-	var texture = new THREE.TextureLoader().load("./textures/colors.png");
+	// var texture = new THREE.TextureLoader().load("./textures/colors.png");
 	//model
+
+	//material
+	material = new THREE.MeshPhongMaterial({
+		shininess: 100,
+		color: 0xaaaaaa,
+		emissive: 0x555555,
+		specular: 0xeeeeee
+	});
 
 
 	var loader = new GLTFLoader();
@@ -59,10 +70,10 @@ function init() {
 			let obj = o.scene;
 			obj.traverse(function(child){
 				if(child.isMesh){
-					child.material.map = texture;
+					child.material = material;
+					// child.material.map = texture;
 					child.material.side = THREE.DoubleSide;
 				} 
-
 			});
 
 			obj.position.x = Math.random() * 200 - 100;
@@ -91,20 +102,22 @@ function init() {
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
 	//controls
-	// controls = new OrbitControls(camera, renderer.domElement);
+
 	controls = new FirstPersonControls(camera, renderer.domElement);
 	controls.movementSpeed = 150;
 	controls.lookSpeed = 0.07;
+
+	// controls = new OrbitControls(camera, renderer.domElement);
 	// controls.addEventListener('change', render);
-	// controls.enableDamping = true;
-	// controls.dampingFactor = 0.05;
-	// controls.screenSpacePanning = true;
-	// controls.keyPanSpeed = 20;
+	// // controls.enableDamping = true;
+	// // controls.dampingFactor = 0.05;
+	// controls.screenSpacePanning = false;
+	// // controls.keyPanSpeed = 20;
 
-	controls.minDistance = 50;
-	controls.maxDistance = 1000;
+	// controls.minDistance = 50;
+	// controls.maxDistance = 1000;
 
-	controls.maxPolarAngle = Math.PI;
+	// controls.maxPolarAngle = Math.PI;
 
 
 	//window resize
@@ -136,7 +149,6 @@ function onDocumentMouseMove( event ) {
 function animate() {
 
 	requestAnimationFrame( animate );
-	// controls.update();
 	render();
 
 }

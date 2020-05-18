@@ -13,14 +13,14 @@
     width: 100px;
     height: 100px;
     position: fixed;
-    color: yellow;
+    color: darkgray;
     top: calc(50vh - 50px);
     left: calc(50vw - 50px);
     cursor: pointer;
 }
 
 #play-btn:hover {
-    color: cornflowerblue;
+    color: black;
 }
 
 .word {
