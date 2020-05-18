@@ -13,9 +13,18 @@ var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 // var objFileNames = ['MA_Arbol', 'MA_Flor', 'Piedra1', 'Monumento3-1', 'Monumento4', 'Piedra1'];
-var objFileNames = ['MA_Arbol'];
+var objFileNames = ['ARBOL2V2'];
+
+var views = {
+	'ARBOL2V2': {
+		"position": [-16.64, 1.95, -33.21],
+		"rotation": [-3.12, -0.19, -3.13]
+	}
+}
 
 var objID = 0;
+
+var obj;
 
 var clock = new THREE.Clock();
 
@@ -30,7 +39,22 @@ function init() {
 
 	//camera
 	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-	camera.position.z = 250;
+	camera.position.z = 100;
+
+	//renderer
+
+	renderer = new THREE.WebGLRenderer();
+	renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	container.appendChild( renderer.domElement );
+
+	document.addEventListener( 'click', onDocumentClick, false );
+	
+
+	//controls
+	controls = new FirstPersonControls(camera, renderer.domElement);
+	controls.movementSpeed = 5;
+	controls.lookSpeed = 0.01;
 
 	//scene
 
@@ -65,9 +89,21 @@ function init() {
 
 	function loadNextFile(){
 		if(objID >= objFileNames.length) return;
+		let name = objFileNames[objID]
+		loader.load(`./models/${name}.gltf`, function(o){
+			if(obj != null){
+				console.log("cleanup");
+				scene.remove(obj);
+				console.log(obj);
+				// obj.geometry.dispose();
+				obj.traverse(function(child){
+					if(child.isMesh){
+						child.geometry.dispose();
+					} 
+				});
+			}
 
-		loader.load(`./models/${objFileNames[objID]}.gltf`, function(o){
-			let obj = o.scene;
+			obj = o.scene;
 			obj.traverse(function(child){
 				if(child.isMesh){
 					child.material = material;
@@ -76,36 +112,38 @@ function init() {
 				} 
 			});
 
-			obj.position.x = Math.random() * 200 - 100;
-			obj.position.y = Math.random() * 200 - 100;
-			obj.scale.set(10, 10, 10);
-			obj.rotation.x = -1.57;
 
+			const box = new THREE.Box3().setFromObject(obj);
+			const center = box.getCenter( new THREE.Vector3() );
+
+			obj.position.x += ( obj.position.x - center.x );
+			obj.position.y += ( obj.position.y - center.y );
+			obj.position.z += ( obj.position.z - center.z );
 			scene.add(obj);
 
 			objID += 1;
+			// controls.update();
+			camera.position.set(views[name].position[0], views[name].position[1], views[name].position[2]);
+			camera.rotation.set(views[name].rotation[0], views[name].rotation[1], views[name].rotation[2]);
+			let vLookAt = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion).add(camera.position);
+			controls.lookAt(vLookAt);
+			// let fwd = new THREE.Vector3(0,0,1);
+			// fwd.applyMatrix3(camera.matrixWorld).normalize();
+			// let offset = fwd.multiplyScalar(100);
+			// camera.position.set(controls.target).sub(offset);
 			render();
-			loadNextFile();
+
+			setTimeout(loadNextFile, 5000);
 
 		});
 	}
 
 	loadNextFile();
 		
-	//renderer
-
-	renderer = new THREE.WebGLRenderer();
-	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	container.appendChild( renderer.domElement );
-
-	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
 	//controls
 
-	controls = new FirstPersonControls(camera, renderer.domElement);
-	controls.movementSpeed = 150;
-	controls.lookSpeed = 0.07;
+
 
 	// controls = new OrbitControls(camera, renderer.domElement);
 	// controls.addEventListener('change', render);
@@ -144,6 +182,10 @@ function onDocumentMouseMove( event ) {
 
 }
 
+function onDocumentClick( event ) {
+	console.log(camera.position);
+	console.log(camera.rotation);
+}
 //
 
 function animate() {
