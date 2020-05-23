@@ -72,6 +72,9 @@ var views = {
 var objID = 0;
 var obj;
 var clock = new THREE.Clock();
+var timerInterval;
+var length = 1800; //time in seconds
+
 
 init();
 var player = new Tone.Player("./audio.mp3").toMaster();
@@ -85,10 +88,28 @@ $('#titlescreen').click(function(){
         player.start();
 		$('#title-container ').addClass("title-clicked");
 		$('#counter').show();
+		timerInterval = setInterval(timer, 1000);
 		animate();
 	}
 	
 });
+
+function timer(){
+	var minutes = Math.floor((length % (60 * 60)) / (60));
+	var seconds = Math.floor((length % 60));
+	if(minutes < 10){
+		minutes = "0" + minutes;
+	}
+	if(seconds < 10){
+		seconds = "0" + seconds;
+	}
+	document.getElementById("timer").innerHTML = minutes + ":" + seconds;
+	length -= 1;
+	if (length < 0) {
+		clearInterval(timerInterval);
+		document.getElementById("timer").innerHTML = "00:00";
+	}
+}
 
 function init() {
 	container = document.createElement('div');

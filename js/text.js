@@ -28,9 +28,6 @@ var noteID = 0;
 // });
 
 
-// $(document).ready(function(){
-//     makeDivs();
-// });
 $("canvas").on('mousedown', function(){
     synth.triggerAttackRelease(notes[noteID], "1n");
     noteID++;
