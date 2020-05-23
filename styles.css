@@ -4,6 +4,11 @@ body, html {
     font-family: sans-serif;
 }
 
+html {
+    background-color: #ccc;
+
+}
+
 * {
     box-sizing: border-box;
 }
@@ -18,17 +23,18 @@ canvas:active {
 
 #title-container {
     position: fixed;
-    justify-content: center;
-    align-items: center;
     width: 100vw;
     height: 100vh;
     display: flex;
-    background-color: #cccccc;
+    justify-content: center;
+    align-items: center;
+    /* background-color: #cccccc; */
     color: black;
 }
 
 #titlescreen {
-    font-size: 14.5vw;
+    /* background-color: #cccccc; */
+    font-size: 50px;
     text-align: center;
     z-index: 1;
     letter-spacing: -0.05em;
@@ -49,21 +55,27 @@ em {
     color: #666;
 }
 
-#instructions {
-    font-size: 0.4em;
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    top: -1.5em;
-    letter-spacing: 0;
-}
-
 #timer {
     position: fixed;
     width: 100vw;
     text-align: center;
     bottom: 5px;
     font-size: 50px;
+    display: none;
+}
+
+
+#runner {
+    z-index: -1;
+    position: fixed;
+    width: 100vw;
+    top: 5px;
+    font-size: 50px;
+    line-height: 1;
+    text-transform: uppercase;
+    text-align: center;
+    display: none;
+    color: #999;
 }
 
 #counter {
@@ -72,26 +84,30 @@ em {
     left: 5px;
     font-size: 50px;
     z-index: 1;
-    display: none;
-}
-
-.title-clicked {
-    z-index: -1!important;
-    color: #bbb!important;
+    /* display: none; */
 }
 
 #moreinfo-btn {
     position: fixed;
     z-index: 2;
-    right: 10px;
+    right: 15px;
     bottom: 5px;
     font-size: 50px;
-    cursor: pointer;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently */
 }
 
-#moreinfo-btn:hover {
+.btn {
+    cursor: pointer;
+}
+.btn:hover {
     color: #666
 }
+
 
 #moreinfo {
     position: fixed;
@@ -107,4 +123,19 @@ em {
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     display: none;
     overflow: auto;
+    z-index: 1;
+}
+
+
+@media (max-width: 400px){
+    #timer {
+        bottom: unset;
+        top: 5px;
+    }
+
+    #moreinfo {
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+    }
 }

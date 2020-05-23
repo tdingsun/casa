@@ -7,6 +7,7 @@ import { FirstPersonControls } from "./FirstPersonControls.js";
 var container;
 var camera, controls, scene, renderer;
 var material;
+var loader;
 
 
 var windowHalfX = window.innerWidth / 2;
@@ -66,32 +67,53 @@ var views = {
 	'Flor1': {
 		"position": [0, -45, 5.00],
 		"rotation": [1.57, 0, 0]
-	},
+	}
 }
 
 var objID = 0;
 var obj;
+var preload;
 var clock = new THREE.Clock();
 var timerInterval;
+var objTimeout;
 var length = 1800; //time in seconds
-
+var started = false;
 
 init();
+
 var player = new Tone.Player("./audio.mp3").toMaster();
-var volume = new Tone.Volume(-27);
-var synth = new Tone.PolySynth(7, Tone.Synth).chain(volume, Tone.Master);
-var notes = Tone.Frequency("G2").harmonize([0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24]);
+var volume = new Tone.Volume(-30);
+var noise = new Tone.Noise('brown').start();
+var autoFilter = new Tone.AutoFilter({
+	"frequency" : "16m",
+	"baseFrequency": 400,
+	"octaves": 1
+}).start();
+
+noise.chain(autoFilter, volume, Tone.Master);
+
 $('#titlescreen').click(function(){
 	console.log("clicked");
     if(player.loaded){
         Tone.context.resume();
         player.start();
-		$('#title-container ').addClass("title-clicked");
-		$('#counter').show();
+		$('#title-container ').hide();
+		// $('#counter').show();
+		$("#runner").show();
+		$("#timer").show();
 		timerInterval = setInterval(timer, 1000);
+		started = true;
+		objTimeout = setTimeout(loadNextFile, 150000);
 		animate();
 	}
-	
+});
+
+$('#arrow').click(function(){
+	clearTimeout(objTimeout);
+	if(objID >= objFileNames.length){
+		objID = 0;
+	}
+	loadNextFile();
 });
 
 function timer(){
@@ -134,19 +156,12 @@ function init() {
 	controls = new FirstPersonControls(camera, renderer.domElement);
 	controls.movementSpeed = 5;
 	controls.lookSpeed = 0.03;
-	// controls.addEventListener('mousedown', function(){
-	// 	console.log("hi");
-	// 	let noteID = Math.floor(Math.random() * notes.length);
-	// 	synth.triggerAttackRelease(notes[noteID], "1n");
-	// }, false);
 
 	//scene
 	scene = new THREE.Scene();
-	// scene.background = new THREE.Color( 0xcccccc );
 
 	//lights
 	var pointLight = new THREE.PointLight( 0xffffff, 0.5 );
-	// pointLight.castShadow = true;
 	pointLight.position.set( 0, 200, 100 );
 
 	camera.add( pointLight );
@@ -155,7 +170,6 @@ function init() {
 	light.position.set( 0, 100, 0 );
 	light.castShadow = true;
 	scene.add(light);
-	// camera.add( light );
 
 	//Set up shadow properties for the light
 	light.shadow.mapSize.width = 512;  // default
@@ -196,65 +210,84 @@ function init() {
 	// var helper = new THREE.CameraHelper( light.shadow.camera );
 	// scene.add( helper );
 
-
-	var loader = new GLTFLoader();
-
-	function loadNextFile(){
-		if(objID >= objFileNames.length) return;
-
-		$('#currcount').text(objID + 1);
-
-		let name = objFileNames[objID]
-		loader.load(`./models/${name}.gltf`, function(o){
-			if(obj != null){
-				console.log("cleanup");
-				scene.remove(obj);
-				console.log(obj);
-				// obj.geometry.dispose();
-				obj.traverse(function(child){
-					if(child.isMesh){
-						child.geometry.dispose();
-					} 
-				});
-			}
-
-			obj = o.scene;
-			obj.traverse(function(child){
-				if(child.isMesh){
-					child.castShadow = true;
-					child.material = material;
-					// child.material.map = texture;
-					child.material.side = THREE.DoubleSide;
-				} 
-			});
-
-			const box = new THREE.Box3().setFromObject(obj);
-			const center = box.getCenter( new THREE.Vector3() );
-
-			obj.position.x = ( - center.x );
-			obj.position.y = ( - box.min.y );
-			obj.position.z = ( - center.z );
-
-			scene.add(obj);
-
-			objID += 1;
-
-			camera.position.set(views[name].position[0], views[name].position[1], views[name].position[2]);
-			camera.rotation.set(views[name].rotation[0], views[name].rotation[1], views[name].rotation[2]);
-			let vLookAt = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion).add(camera.position);
-			controls.lookAt(vLookAt);
-			render();
-
-			setTimeout(loadNextFile, 150000);
-
-		});
-	}
-
-	loadNextFile();
+	loader = new GLTFLoader();
+	loadFirst();
 
 	//window resize
 	window.addEventListener( 'resize', onWindowResize, false );
 }
+
+function renderObject(){
+	let name = objFileNames[objID];
+
+	obj.traverse(function(child){
+		if(child.isMesh){
+			child.castShadow = true;
+			child.material = material;
+			child.material.side = THREE.DoubleSide;
+		} 
+	});
+
+	const box = new THREE.Box3().setFromObject(obj);
+	const center = box.getCenter( new THREE.Vector3() );
+
+	obj.position.x = ( - center.x );
+	obj.position.y = ( - box.min.y );
+	obj.position.z = ( - center.z );
+
+	scene.add(obj);
+	camera.position.set(views[name].position[0], views[name].position[1], views[name].position[2]);
+	camera.rotation.set(views[name].rotation[0], views[name].rotation[1], views[name].rotation[2]);
+	let vLookAt = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion).add(camera.position);
+	controls.lookAt(vLookAt);
+	render();
+}
+
+function loadFirst(){
+	document.getElementById("currcount").innerHTML = 1;
+
+	loader.load(`./models/${objFileNames[objID]}.gltf`, function(o){
+		console.log("loading first object");
+		obj = o.scene;
+
+		renderObject();
+		objID += 1;
+
+		//preload second one
+		loader.load(`./models/${objFileNames[objID]}.gltf`, function(o){
+			preload = o.scene;
+		});
+	});
+}
+
+function loadNextFile(){
+	if(objID >= objFileNames.length) return;
+	document.getElementById("currcount").innerHTML = objID + 1;
+	let name = objFileNames[objID]
+
+	if(obj!= null){
+		scene.remove(obj);
+		obj.traverse(function(child){
+			if(child.isMesh){
+				child.geometry.dispose();
+			} 
+		});
+	}
+	obj = preload;
+	renderObject();
+	objID += 1;
+
+	if(objID >= objFileNames.length){
+		objID = 0;
+	};
+
+	name = objFileNames[objID]
+	loader.load(`./models/${objFileNames[objID]}.gltf`, function(o){
+		preload = o.scene;
+		objTimeout = setTimeout(loadNextFile, 150000);
+	});
+}
+
 
 function onWindowResize() {
 	windowHalfX = window.innerWidth / 2;
