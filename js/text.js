@@ -10,7 +10,8 @@ var speed = 500;
 
 var volume = new Tone.Volume(-24);
 var synth = new Tone.PolySynth(7, Tone.Synth).chain(volume, Tone.Master);
-var notes = Tone.Frequency("G2").harmonize([0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24]);
+var notes = Tone.Frequency("C2").harmonize([0, 3, 7, 10, 12, 15, 19, 22, 24]);
+var noteID = 0;
 // var player = new Tone.Player("./audio.mp3").toMaster();
 
 // StartAudioContext(Tone.context, window);  
@@ -31,8 +32,9 @@ var notes = Tone.Frequency("G2").harmonize([0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 2
 //     makeDivs();
 // });
 $("canvas").on('mousedown', function(){
-    let noteID = Math.floor(Math.random() * notes.length);
     synth.triggerAttackRelease(notes[noteID], "1n");
+    noteID++;
+    if(noteID > notes.length) noteID = 0;
 });
 var keydown = false;
 $("canvas").on('keydown', function(){
@@ -53,5 +55,9 @@ $('#moreinfo-btn').click(function(){
 });
 
 $('#moreinfo').mouseleave(function(){
-    $('#moreinfo').toggle();
+    $('#moreinfo').hide();
 });
+
+// $('#moreinfo').click(function(){
+//     $('#moreinfo').hide();
+// });

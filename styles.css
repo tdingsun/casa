@@ -15,16 +15,6 @@ canvas {
 canvas:active {
     cursor: crosshair;
 }
-#container {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-wrap: wrap;
-    position: fixed;
-    align-content: space-evenly;
-    margin: 0 0 0 0.5px;
-    pointer-events: none;
-}
 
 #title-container {
     position: fixed;
@@ -35,11 +25,10 @@ canvas:active {
     display: flex;
     background-color: #cccccc;
     color: black;
-
 }
 
 #titlescreen {
-    font-size: 12vw;
+    font-size: 14.5vw;
     text-align: center;
     z-index: 1;
     letter-spacing: -0.05em;
@@ -47,20 +36,26 @@ canvas:active {
     cursor: pointer;
     text-transform: uppercase;
     pointer-events: all;
-    transition: color 0.5s;
-
-    
+    transition: color 0.5s;    
 }
 
 em {
     font-family: serif;
     font-size: 1.08em;
     font-style: normal;
-
 }
 
 #titlescreen:hover{
     color: #666;
+}
+
+#instructions {
+    font-size: 0.4em;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    top: -1.5em;
+    letter-spacing: 0;
 }
 
 #counter {
@@ -92,15 +87,16 @@ em {
 
 #moreinfo {
     position: fixed;
-    right: 5px;
-    bottom: 5px;
+    right: 10px;
+    bottom: 10px;
     width: 50vw;
     min-width: 380px;
     max-height: 98vh;
     padding: 10px;
     background-color: #ccc;
     line-height: 1.2;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    /* box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); */
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     display: none;
     overflow: auto;
 }
