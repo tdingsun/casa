@@ -8,12 +8,11 @@ var container;
 var camera, controls, scene, renderer;
 var material;
 
-var mouseX = 0, mouseY = 0;
 
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 var objFileNames = [  'Flor1', 'Piedra2', 'Planta1',  'Arbol4',  'ARBOL2V2',  'Arbol3','Flor2',  'Monumento4', 'Piedra1', 'Monumento2', 'mONUMENTO3', 'Monumento1',      'Monumento5'];
-// objFileNames = shuffle(objFileNames);
+objFileNames = shuffle(objFileNames);
 
 var views = {
 	'Monumento4': {
@@ -71,27 +70,23 @@ var views = {
 }
 
 var objID = 0;
-
 var obj;
-
 var clock = new THREE.Clock();
 
-
 init();
-// render();
 var player = new Tone.Player("./audio.mp3").toMaster();
-
-$('#play-btn').click(function(){
+var volume = new Tone.Volume(-27);
+var synth = new Tone.PolySynth(7, Tone.Synth).chain(volume, Tone.Master);
+var notes = Tone.Frequency("G2").harmonize([0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24]);
+$('#titlescreen').click(function(){
+	console.log("clicked");
     if(player.loaded){
         Tone.context.resume();
         player.start();
-        // setTimeout(() => {
-        //     t = setTimeout(displayText, speed);
-        // }, 4000);
-		$('#play-btn').hide();
+		$('#title-container ').addClass("title-clicked");
 		animate();
-    }
-
+	}
+	
 });
 
 function init() {
@@ -104,35 +99,30 @@ function init() {
 
 	//renderer
 
-	renderer = new THREE.WebGLRenderer();
+	renderer = new THREE.WebGLRenderer({alpha: true});
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.setClearColor( 0x000000, 0 ); // the default
+
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-	container.appendChild( renderer.domElement );
-
-	document.addEventListener( 'click', onDocumentClick, false );
-	
+	container.appendChild( renderer.domElement );	
 
 	//controls
 	controls = new FirstPersonControls(camera, renderer.domElement);
 	controls.movementSpeed = 5;
 	controls.lookSpeed = 0.05;
-
-	//orbit controls
-	// controls = new OrbitControls(camera, renderer.domElement);
-	// controls.addEventListener('change', render);
-
+	// controls.addEventListener('mousedown', function(){
+	// 	console.log("hi");
+	// 	let noteID = Math.floor(Math.random() * notes.length);
+	// 	synth.triggerAttackRelease(notes[noteID], "1n");
+	// }, false);
 
 	//scene
-
 	scene = new THREE.Scene();
-	scene.background = new THREE.Color( 0xcccccc );
+	// scene.background = new THREE.Color( 0xcccccc );
 
 	//lights
-	// var ambientLight = new THREE.AmbientLight( 0xeeeeee, 0.4 );
-	// scene.add( ambientLight );
-
 	var pointLight = new THREE.PointLight( 0xffffff, 0.5 );
 	// pointLight.castShadow = true;
 	pointLight.position.set( 0, 200, 100 );
@@ -159,14 +149,7 @@ function init() {
 	light.shadow.bias = - 0.000222;
 	light.shadow.radius = 10;
 	
-	
-
-
 	scene.add( camera );
-
-	//texture
-	// var texture = new THREE.TextureLoader().load("./textures/colors.png");
-	//model
 
 	//material
 	material = new THREE.MeshPhongMaterial({
@@ -193,12 +176,11 @@ function init() {
 
 
 	var loader = new GLTFLoader();
-	// loader.load('../models/MA_Arbol.obj', function(obj){
-	// 	object = obj;
-	// }, onProgress, onError);
 
 	function loadNextFile(){
 		if(objID >= objFileNames.length) return;
+
+		$('#currcount').text(objID + 1);
 
 		let name = objFileNames[objID]
 		loader.load(`./models/${name}.gltf`, function(o){
@@ -224,17 +206,16 @@ function init() {
 				} 
 			});
 
-
 			const box = new THREE.Box3().setFromObject(obj);
 			const center = box.getCenter( new THREE.Vector3() );
 
-			obj.position.x += ( obj.position.x - center.x );
-			obj.position.y += ( obj.position.y - box.min.y );
-			obj.position.z += ( obj.position.z - center.z );
+			obj.position.x = ( - center.x );
+			obj.position.y = ( - box.min.y );
+			obj.position.z = ( - center.z );
+
 			scene.add(obj);
 
 			objID += 1;
-			// controls.update();
 
 			camera.position.set(views[name].position[0], views[name].position[1], views[name].position[2]);
 			camera.rotation.set(views[name].rotation[0], views[name].rotation[1], views[name].rotation[2]);
@@ -242,36 +223,18 @@ function init() {
 			controls.lookAt(vLookAt);
 			render();
 
-			setTimeout(loadNextFile, 2000);
+			setTimeout(loadNextFile, 150000);
 
 		});
 	}
 
 	loadNextFile();
-		
-
-	//controls
-
-
-
-	// // controls.enableDamping = true;
-	// // controls.dampingFactor = 0.05;
-	// controls.screenSpacePanning = false;
-	// // controls.keyPanSpeed = 20;
-
-	// controls.minDistance = 50;
-	// controls.maxDistance = 1000;
-
-	// controls.maxPolarAngle = Math.PI;
-
 
 	//window resize
-
 	window.addEventListener( 'resize', onWindowResize, false );
 }
 
 function onWindowResize() {
-
 	windowHalfX = window.innerWidth / 2;
 	windowHalfY = window.innerHeight / 2;
 
@@ -280,18 +243,6 @@ function onWindowResize() {
 
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	controls.handleResize();
-}
-
-function onDocumentMouseMove( event ) {
-
-	mouseX = ( event.clientX - windowHalfX ) / 2;
-	mouseY = ( event.clientY - windowHalfY ) / 2;
-
-}
-
-function onDocumentClick( event ) {
-	console.log(camera.position);
-	console.log(camera.rotation);
 }
 
 function animate() {

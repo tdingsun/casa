@@ -1,3 +1,13 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+
+}
+
+* {
+    box-sizing: border-box;
+}
 #container {
     width: 100vw;
     height: 100vh;
@@ -9,33 +19,81 @@
     pointer-events: none;
 }
 
-#play-btn {
-    width: 100px;
-    height: 100px;
+#title-container {
     position: fixed;
-    color: darkgray;
-    top: calc(50vh - 50px);
-    left: calc(50vw - 50px);
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    background-color: #cccccc;
+    color: black;
+
+}
+
+#titlescreen {
+    font-size: 12vw;
+    text-align: center;
+    z-index: 1;
+    letter-spacing: -0.05em;
+    line-height: 0.8;
+    cursor: pointer;
+    text-transform: uppercase;
+    pointer-events: all;
+
+    
+}
+
+em {
+    font-family: serif;
+    font-size: 1.08em;
+    font-style: normal;
+
+}
+
+#titlescreen:hover{
+    color: #666;
+}
+
+#counter {
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    font-size: 50px;
+    z-index: 1;
+}
+
+.title-clicked {
+    z-index: -1!important;
+    color: #bbb!important;
+}
+
+#moreinfo-btn {
+    position: fixed;
+    z-index: 2;
+    right: 10px;
+    bottom: 5px;
+    font-size: 50px;
     cursor: pointer;
 }
 
-#play-btn:hover {
-    color: black;
+#moreinfo-btn:hover {
+    color: #666
 }
 
-.word {
-    width: 200px;
-    height: 100px;
-    flex-grow: 1;
-    flex-shrink: 0;
-    border: 1px solid yellow;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: yellow;
-    font-size: 20px;
-    font-family: sans-serif;
-    margin: 0 0 0 -1px;
+#moreinfo {
+    position: fixed;
+    right: 5px;
+    bottom: 5px;
+    width: 50vw;
+    min-width: 380px;
+    max-height: 98vh;
+    padding: 10px;
+    background-color: #ccc;
+    line-height: 1.2;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    display: none;
+    overflow: auto;
 }
 
 .active {

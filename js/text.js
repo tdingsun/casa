@@ -8,7 +8,7 @@ var numBoxes = 0;
 var c = 0;
 var speed = 500;
 
-var volume = new Tone.Volume(-27);
+var volume = new Tone.Volume(-24);
 var synth = new Tone.PolySynth(7, Tone.Synth).chain(volume, Tone.Master);
 var notes = Tone.Frequency("G2").harmonize([0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24]);
 // var player = new Tone.Player("./audio.mp3").toMaster();
@@ -30,26 +30,28 @@ var notes = Tone.Frequency("G2").harmonize([0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 2
 // $(document).ready(function(){
 //     makeDivs();
 // });
-
-function displayText(){
+$("canvas").on('mousedown', function(){
     let noteID = Math.floor(Math.random() * notes.length);
     synth.triggerAttackRelease(notes[noteID], "1n");
-
-    $(`#box-${c % numBoxes}`).addClass("active");
-    $(`#box-${(c-1) % numBoxes}`).removeClass("active");
-    let word = text_array[c];
-    $(`#box-${c % numBoxes}`).text(word);
-    c++;
-    t = setTimeout(displayText, speed);
-}
-
-function makeDivs(){
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    let x = Math.floor(width/divW);
-    let y = Math.floor(height/divH);
-    numBoxes = x * y;
-    for(let i = 0; i < numBoxes; i++){
-        $("#container").append($(`<div class='word' id='box-${i}'></div>`));
+});
+var keydown = false;
+$("canvas").on('keydown', function(){
+    if(!keydown){
+        keydown = true;
+        let noteID = Math.floor(Math.random() * notes.length);
+        synth.triggerAttackRelease(notes[noteID], "1n");
     }
-}
+});
+
+$("canvas").on('keyup', function(){
+    keydown = false;
+})
+
+
+$('#moreinfo-btn').click(function(){
+    $('#moreinfo').toggle();
+});
+
+$('#moreinfo').mouseleave(function(){
+    $('#moreinfo').toggle();
+});
