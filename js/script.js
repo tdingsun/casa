@@ -12,61 +12,61 @@ var mouseX = 0, mouseY = 0;
 
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
-var objFileNames = ['Monumento4', 'Piedra1', 'Monumento2', 'Flor2', 'Arbol3', 'ARBOL2V2', 'mONUMENTO3', 'Arbol4', 'Monumento1', 'Planta1', 'Piedra2', 'Monumento5', 'Flor1'];
-objFileNames = shuffle(objFileNames);
+var objFileNames = [  'Flor1', 'Piedra2', 'Planta1',  'Arbol4',  'ARBOL2V2',  'Arbol3','Flor2',  'Monumento4', 'Piedra1', 'Monumento2', 'mONUMENTO3', 'Monumento1',      'Monumento5'];
+// objFileNames = shuffle(objFileNames);
 
 var views = {
 	'Monumento4': {
-		"position": [-248.52, -123.126, 416.96],
+		"position": [-248.52, 30.126, 416.96],
 		"rotation": [0.27, -0.54, 0.14]
 	},
 	'Piedra1': {
-		"position": [-4.43, 0.34, 42.96],
+		"position": [-4.43, 4.34, 42.96],
 		"rotation": [-0.01, -0.21, 0.0]
 	},
 	'Monumento2': {
-		"position": [23.36, -12.50, 22.95],
+		"position": [23.36, 52.50, 22.95],
 		"rotation": [0.35, 0.31, -0.11]
 	},
 	'Flor2': {
-		"position": [0.57, 7.69, -0.21],
-		"rotation": [-1.57, -7.00, -2.37]
+		"position": [-5, 10,  0],
+		"rotation": [-1.57, -0.5, 0]
 	},
 	'Arbol3': {
-		"position": [37.47, 69.83, 39.33],
-		"rotation": [-1.56, 0.00, -0.60]
+		"position": [27.47, 100.83, 29.33],
+		"rotation": [-1.56, -0.01, -0.60]
 	},
 	'ARBOL2V2': {
-		"position": [-16.64, 1.95, -33.21],
+		"position": [-16.64, 10.95, -33.21],
 		"rotation": [-3.12, -0.19, -3.13]
 	},
 	'mONUMENTO3': {
-		"position": [-0.85, -5.00, -9.98],
-		"rotation": [-2.81, 0.42, 3.00]
+		"position": [10, 20.00, -10],
+		"rotation": [-3, 0.52, 3.00]
 	},
 	'Arbol4': {
-		"position": [-0.86, 5.00, -11.50],
-		"rotation": [-2.89, -0.60, -2.99]
+		"position": [-2.86, 9.00, -7.50],
+		"rotation": [-3.14, -0.55, -3.14]
 	},
 	'Monumento1': {
-		"position": [-67.90, 6.72, 85.92],
+		"position": [-67.90, 40, 85.92],
 		"rotation": [-0.07, -0.63, -0.04]
 	},
 	'Planta1': {
-		"position": [50.81, 3.28, 6.53],
+		"position": [45.81, 12, 7.53],
 		"rotation": [-0.47, 1.42, 0.46]
 	},
 	'Piedra2': {
-		"position": [-7.82, 4.06, 64.87],
+		"position": [-7.82, 8.5, 64.87],
 		"rotation": [-6.19, -0.15, -9.58]
 	},
 	'Monumento5': {
-		"position": [22.98, -31.39, 9.89],
+		"position": [22.98, 20, 9.89],
 		"rotation": [1.89, 0.66, -2.06]
 	},
 	'Flor1': {
-		"position": [-10, 48.01, 0.00],
-		"rotation": [-1.57, -6.51, 0.00]
+		"position": [0, -45, 5.00],
+		"rotation": [1.57, 0, 0]
 	},
 }
 
@@ -79,7 +79,20 @@ var clock = new THREE.Clock();
 
 init();
 // render();
-animate();
+var player = new Tone.Player("./audio.mp3").toMaster();
+
+$('#play-btn').click(function(){
+    if(player.loaded){
+        Tone.context.resume();
+        player.start();
+        // setTimeout(() => {
+        //     t = setTimeout(displayText, speed);
+        // }, 4000);
+		$('#play-btn').hide();
+		animate();
+    }
+
+});
 
 function init() {
 	container = document.createElement('div');
@@ -94,6 +107,8 @@ function init() {
 	renderer = new THREE.WebGLRenderer();
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.shadowMap.enabled = true;
+	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 	container.appendChild( renderer.domElement );
 
 	document.addEventListener( 'click', onDocumentClick, false );
@@ -102,7 +117,7 @@ function init() {
 	//controls
 	controls = new FirstPersonControls(camera, renderer.domElement);
 	controls.movementSpeed = 5;
-	controls.lookSpeed = 0.01;
+	controls.lookSpeed = 0.05;
 
 	//orbit controls
 	// controls = new OrbitControls(camera, renderer.domElement);
@@ -112,14 +127,41 @@ function init() {
 	//scene
 
 	scene = new THREE.Scene();
-	scene.background = new THREE.Color( 0xeeeeee );
+	scene.background = new THREE.Color( 0xcccccc );
 
 	//lights
-	var ambientLight = new THREE.AmbientLight( 0xeeeeee, 0.5 );
-	scene.add( ambientLight );
+	// var ambientLight = new THREE.AmbientLight( 0xeeeeee, 0.4 );
+	// scene.add( ambientLight );
 
-	var pointLight = new THREE.PointLight( 0xeeeeee, 0.5 );
+	var pointLight = new THREE.PointLight( 0xffffff, 0.5 );
+	// pointLight.castShadow = true;
+	pointLight.position.set( 0, 200, 100 );
+
 	camera.add( pointLight );
+
+	var light = new THREE.DirectionalLight( 0x000000, 0.5);
+	light.position.set( 0, 100, 0 );
+	light.castShadow = true;
+	scene.add(light);
+	// camera.add( light );
+
+	//Set up shadow properties for the light
+	light.shadow.mapSize.width = 512;  // default
+	light.shadow.mapSize.height = 512; // default
+	light.shadow.camera.near = 10;       // default
+	light.shadow.camera.far = 2000;      // default
+	light.shadow.camera.zoom = 1;      // default
+	light.shadow.camera.right = 100;      // default
+	light.shadow.camera.left = -100;      // default
+	light.shadow.camera.top = 100;      // default
+	light.shadow.camera.bottom = -100;      // default
+
+	light.shadow.bias = - 0.000222;
+	light.shadow.radius = 10;
+	
+	
+
+
 	scene.add( camera );
 
 	//texture
@@ -128,12 +170,26 @@ function init() {
 
 	//material
 	material = new THREE.MeshPhongMaterial({
-		shininess: 150,
-		color: 0xbbbbbb,
-		emissive: 0x333333,
-		specular: 0xaaaaaa,
-		flatShading: true
+		shininess: 200,
+		color: 0xdddddd,
+		emissive: 0x777777,
+		specular: 0x111111,
+		// flatShading: true
 	});
+
+
+	//floor
+	var planeGeometry = new THREE.PlaneBufferGeometry(500, 500);
+	planeGeometry.rotateX( - Math.PI / 2);
+	var planeMaterial = new THREE.ShadowMaterial();
+	planeMaterial.opacity = 0.3;
+	var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+	plane.position.y = 0;
+	plane.receiveShadow = true;
+	scene.add( plane );
+
+	// var helper = new THREE.CameraHelper( light.shadow.camera );
+	// scene.add( helper );
 
 
 	var loader = new GLTFLoader();
@@ -161,6 +217,7 @@ function init() {
 			obj = o.scene;
 			obj.traverse(function(child){
 				if(child.isMesh){
+					child.castShadow = true;
 					child.material = material;
 					// child.material.map = texture;
 					child.material.side = THREE.DoubleSide;
@@ -172,7 +229,7 @@ function init() {
 			const center = box.getCenter( new THREE.Vector3() );
 
 			obj.position.x += ( obj.position.x - center.x );
-			obj.position.y += ( obj.position.y - center.y );
+			obj.position.y += ( obj.position.y - box.min.y );
 			obj.position.z += ( obj.position.z - center.z );
 			scene.add(obj);
 

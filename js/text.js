@@ -11,20 +11,20 @@ var speed = 500;
 var volume = new Tone.Volume(-27);
 var synth = new Tone.PolySynth(7, Tone.Synth).chain(volume, Tone.Master);
 var notes = Tone.Frequency("G2").harmonize([0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24]);
-var player = new Tone.Player("./audio.mp3").toMaster();
+// var player = new Tone.Player("./audio.mp3").toMaster();
 
-StartAudioContext(Tone.context, window);  
-$('#play-btn').click(function(){
-    if(player.loaded){
-        Tone.context.resume();
-        player.start();
-        // setTimeout(() => {
-        //     t = setTimeout(displayText, speed);
-        // }, 4000);
-        $('#play-btn').hide();
-    }
+// StartAudioContext(Tone.context, window);  
+// $('#play-btn').click(function(){
+//     if(player.loaded){
+//         Tone.context.resume();
+//         player.start();
+//         // setTimeout(() => {
+//         //     t = setTimeout(displayText, speed);
+//         // }, 4000);
+//         $('#play-btn').hide();
+//     }
 
-});
+// });
 
 
 // $(document).ready(function(){
