@@ -84,6 +84,7 @@ $('#titlescreen').click(function(){
         Tone.context.resume();
         player.start();
 		$('#title-container ').addClass("title-clicked");
+		$('#counter').show();
 		animate();
 	}
 	
@@ -111,7 +112,7 @@ function init() {
 	//controls
 	controls = new FirstPersonControls(camera, renderer.domElement);
 	controls.movementSpeed = 5;
-	controls.lookSpeed = 0.05;
+	controls.lookSpeed = 0.03;
 	// controls.addEventListener('mousedown', function(){
 	// 	console.log("hi");
 	// 	let noteID = Math.floor(Math.random() * notes.length);
