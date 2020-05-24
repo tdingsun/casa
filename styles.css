@@ -14,6 +14,7 @@ html {
 
 canvas {
     cursor: pointer;
+    position: fixed;
 }
 
 canvas:active {
@@ -28,6 +29,7 @@ canvas:active {
     justify-content: center;
     align-items: center;
     color: black;
+    z-index: 1;
 }
 
 #titlescreen {
