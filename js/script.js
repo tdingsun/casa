@@ -156,7 +156,7 @@ function init() {
 
 
 	var spotLight = new THREE.SpotLight( 0xffffff, 0.5 );
-	spotLight.position.set( 0, 200, 100 );
+	spotLight.position.set( 0, 50, 100 );
 
 	camera.add( spotLight );
 
