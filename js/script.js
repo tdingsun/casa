@@ -1,7 +1,5 @@
 import * as THREE from "./three.module.js";
-import { OBJLoader } from "./OBJLoader.js";
 import { GLTFLoader } from "./GLTFLoader.js";
-import { OrbitControls } from "./OrbitControls.js";
 import { FirstPersonControls } from "./FirstPersonControls.js";
 THREE.Cache.enabled = true;
 
@@ -13,9 +11,17 @@ var loader;
 
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
-var objFileNames = [ 'Piedra1', 'Arbol4',   'Monumento4',  'Flor1', 'Piedra2', 'Planta1',    'ARBOL2V2',  'Arbol3','Flor2',   'Monumento2', 'mONUMENTO3', 'Monumento1',      'Monumento5'];
-// objFileNames = shuffle(objFileNames);
+
 var objects = [];
+
+var objID = 0;
+var clock = new THREE.Clock();
+var timerInterval;
+var objTimeout;
+var length = 1800; //time in seconds
+
+var objFileNames = [ 'Piedra1', 'Arbol4',   'Monumento4',  'Flor1', 'Piedra2', 'Planta1',    'ARBOL2V2',  'Arbol3','Flor2',   'Monumento2', 'mONUMENTO3', 'Monumento1',      'Monumento5'];
+objFileNames = shuffle(objFileNames);
 
 var views = {
 	'Monumento4': {
@@ -72,19 +78,6 @@ var views = {
 	}
 }
 
-var objID = 0;
-var obj;
-var preload;
-var clock = new THREE.Clock();
-var timerInterval;
-var objTimeout;
-var length = 1800; //time in seconds
-var started = false;
-
-init();
-animate();
-
-
 var player = new Tone.Player("./audio.mp3").toMaster();
 var volume = new Tone.Volume(-30);
 var noise = new Tone.Noise('brown').start();
@@ -93,20 +86,18 @@ var autoFilter = new Tone.AutoFilter({
 	"baseFrequency": 400,
 	"octaves": 1
 }).start();
-
 noise.chain(autoFilter, volume, Tone.Master);
 
+init();
+animate();
+
 $('#titlescreen').click(function(){
-	console.log("clicked");
     if(player.loaded){
         Tone.context.resume();
         player.start();
-		$('#title-container ').hide();
-		// $('#counter').show();
-		// $("#runner").show();
+		$('#title-container').hide();
 		$("#timer").show();
 		timerInterval = setInterval(timer, 1000);
-		started = true;
 		objTimeout = setTimeout(loadNextFile, 150000);
 	}
 });
@@ -116,8 +107,6 @@ $('#arrow').click(function(){
 
 		clearTimeout(objTimeout);
 		objTimeout = setTimeout(loadNextFile(), 0);
-	} else {
-		console.log("stopped");
 	}
 });
 
@@ -225,9 +214,7 @@ function init() {
 
 function loadFirst(){
 	document.getElementById("currcount").innerHTML = 1;
-	console.log("loadfirst");
 	loader.load(`./models/${objFileNames[objID]}.glb`, function(o){
-		console.log(objFileNames[objID]);
 		addObjectToScene(o.scene);
 		renderObject();
 		objID += 1;
@@ -243,7 +230,7 @@ function loadNextFile(){
 	document.getElementById("currcount").innerHTML = objID + 1;
 	renderObject();
 	objID += 1;
-	
+
 	if(objID >= objFileNames.length){
 		objID = 0;
 	}
@@ -286,10 +273,10 @@ function addObjectToScene(obj){
 function renderObject(){
 	renderer.shadowMap.needsUpdate = true;
 
-	console.log(objects.length);
 	objects.forEach(function(object){
 		object.visible = false;
 	});
+
 	let name = objFileNames[objID];
 	objects[objID].visible = true;
 
@@ -299,8 +286,6 @@ function renderObject(){
 	controls.lookAt(vLookAt);
 	render();
 }
-
-
 
 function onWindowResize() {
 	windowHalfX = window.innerWidth / 2;
@@ -314,10 +299,8 @@ function onWindowResize() {
 }
 
 function animate() {
-
 	requestAnimationFrame( animate );
 	render();
-
 }
 
 function render() {
