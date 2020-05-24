@@ -107,13 +107,18 @@ $('#titlescreen').click(function(){
 		$("#timer").show();
 		timerInterval = setInterval(timer, 1000);
 		started = true;
-		objTimeout = setTimeout(loadNextFile, 2000);
+		objTimeout = setTimeout(loadNextFile, 150000);
 	}
 });
 
 $('#arrow').click(function(){
-	clearTimeout(objTimeout);
-	objTimeout = setTimeout(loadNextFile(), 0);
+	if(objects[objID] != undefined){
+
+		clearTimeout(objTimeout);
+		objTimeout = setTimeout(loadNextFile(), 0);
+	} else {
+		console.log("stopped");
+	}
 });
 
 function timer(){
@@ -235,22 +240,23 @@ function loadFirst(){
 }
 
 function loadNextFile(){
-	if(objID >= objFileNames.length){
-		objID = 0;
-	}
 	document.getElementById("currcount").innerHTML = objID + 1;
 	renderObject();
 	objID += 1;
+	
+	if(objID >= objFileNames.length){
+		objID = 0;
+	}
 
 	if(objects.length < objFileNames.length){
 		loader.load(`./models/${objFileNames[objID]}.glb`, function(o){
 			addObjectToScene(o.scene);
 			clearTimeout(objTimeout);
-			objTimeout = setTimeout(loadNextFile, 2000);
+			objTimeout = setTimeout(loadNextFile, 150000);
 		});
 	} else {
 		clearTimeout(objTimeout);
-		objTimeout = setTimeout(loadNextFile, 2000);
+		objTimeout = setTimeout(loadNextFile, 150000);
 	}
 }
 
