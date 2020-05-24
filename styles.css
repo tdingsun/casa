@@ -75,7 +75,7 @@ em {
     text-transform: uppercase;
     text-align: center;
     display: none;
-    color: #999;
+    color: red;
 }
 
 #counter {
