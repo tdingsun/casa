@@ -112,7 +112,7 @@ $('#arrow').click(function(){
 
 function timer(){
 	var minutes = Math.floor((length % (60 * 60)) / (60));
-	var seconds = Math.frloor((length % 60));
+	var seconds = Math.floor((length % 60));
 	if(minutes < 10){
 		minutes = "0" + minutes;
 	}
@@ -136,7 +136,7 @@ function init() {
 
 	//renderer
 
-	renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer = new THREE.WebGLRenderer({antialias: true, precision: 'lowp'});
 	renderer.setPixelRatio( 1 );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 
