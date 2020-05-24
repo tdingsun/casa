@@ -21,7 +21,7 @@ var objTimeout;
 var length = 1800; //time in seconds
 
 var objFileNames = [ 'Piedra1', 'Arbol4',   'Monumento4',  'Flor1', 'Piedra2', 'Planta1',    'ARBOL2V2',  'Arbol3','Flor2',   'Monumento2', 'mONUMENTO3', 'Monumento1',      'Monumento5'];
-// objFileNames = shuffle(objFileNames);
+objFileNames = shuffle(objFileNames);
 
 var views = {
 	'Monumento4': {
