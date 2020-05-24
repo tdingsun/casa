@@ -208,8 +208,8 @@ function init() {
 	plane.matrixAutoUpdate = false
 	scene.add( plane );
 
-	var helper = new THREE.CameraHelper( light.shadow.camera );
-	scene.add( helper );
+	// var helper = new THREE.CameraHelper( light.shadow.camera );
+	// scene.add( helper );
 
 	loader = new GLTFLoader();
 	loadFirst();
