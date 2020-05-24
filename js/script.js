@@ -21,7 +21,7 @@ var objTimeout;
 var length = 1800; //time in seconds
 
 var objFileNames = [ 'Piedra1', 'Arbol4',   'Monumento4',  'Flor1', 'Piedra2', 'Planta1',    'ARBOL2V2',  'Arbol3','Flor2',   'Monumento2', 'mONUMENTO3', 'Monumento1',      'Monumento5'];
-objFileNames = shuffle(objFileNames);
+// objFileNames = shuffle(objFileNames);
 
 var views = {
 	'Monumento4': {
@@ -112,7 +112,7 @@ $('#arrow').click(function(){
 
 function timer(){
 	var minutes = Math.floor((length % (60 * 60)) / (60));
-	var seconds = Math.floor((length % 60));
+	var seconds = Math.frloor((length % 60));
 	if(minutes < 10){
 		minutes = "0" + minutes;
 	}
@@ -136,8 +136,8 @@ function init() {
 
 	//renderer
 
-	renderer = new THREE.WebGLRenderer();
-	renderer.setPixelRatio( 2 );
+	renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setPixelRatio( 1 );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 
 	renderer.shadowMap.enabled = true;
