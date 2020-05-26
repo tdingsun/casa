@@ -80,12 +80,17 @@ var views = {
 	}
 }
 
-var player = new Tone.Player("./audio.mp3").toMaster();
-Tone.Buffer.on('load', function(){
-	console.log("loaded");
+// var player = new Tone.Player("./audio.mp3").toMaster();
+var audio = new Audio('./audio.mp3');
+audio.oncanplay = function() {
 	$("#titlescreen").addClass("loaded");
 	$('#loading').hide();
-});
+};
+
+// Tone.Buffer.on('load', function(){
+// 	console.log("loaded");
+
+// });
 var volume = new Tone.Volume(-12);
 var noise = new Tone.Noise('brown').start();
 var autoFilter = new Tone.AutoFilter({
@@ -98,16 +103,16 @@ noise.chain(autoFilter, volume, Tone.Master);
 init();
 animate();
 
-$('#titlescreen').click(function(){
-    if(player.loaded){
-        Tone.context.resume();
-        player.start();
+$('#titlescreen').click(function(e){
+	if($(this).hasClass("loaded")){
+		Tone.context.resume();
+		audio.play();
 		$('#title-container').hide();
 		$("#arrow").show();
 		timerInterval = setInterval(timer, 1000);
 		objTimeout = setTimeout(loadNextFile, 150000);
 		started = true;
-	}
+	};
 });
 
 $('#arrow').click(function(){
