@@ -133,11 +133,11 @@ em {
 }
 
 #moreinfo {
-    position: fixed;
+    position: absolute;
     right: 10px;
     bottom: 10px;
     width: 50vw;
-    min-width: 380px;
+    min-width: 375px;
     max-height: calc(100vh - 20px);
     padding: 10px;
     background-color: #ccc;
@@ -160,5 +160,6 @@ em {
         right: 0;
         bottom: 0;
         width: 100vw;
+        max-height: 100%;
     }
 }
