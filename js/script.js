@@ -20,6 +20,8 @@ var timerInterval;
 var objTimeout;
 var length = 1889; //time in seconds
 
+var started = false;
+
 var objFileNames = ['Flor1', 'Planta1', 'Monumento1', 'Arbol4', 'Arbol3', 'Flor2' , 'Piedra1', '3', '1', '12',  'mONUMENTO3', 'Piedra2', 'ARBOL2V2'];
 objFileNames = shuffle(objFileNames);
 
@@ -104,6 +106,7 @@ $('#titlescreen').click(function(){
 		$("#arrow").show();
 		timerInterval = setInterval(timer, 1000);
 		objTimeout = setTimeout(loadNextFile, 150000);
+		started = true;
 	}
 });
 
@@ -232,10 +235,14 @@ function loadFirst(){
 		addObjectToScene(o.scene);
 		renderObject();
 		objID += 1;
-	
+		
 		//preload second one
+		$("#arrow").hide();
 		loader.load(`./models/${objFileNames[objID]}.glb`, function(o){
 			addObjectToScene(o.scene);
+			if(started){
+				$("#arrow").show();
+			}
 		});
 	});
 }
@@ -250,7 +257,9 @@ function loadNextFile(){
 	}
 
 	if(objects.length < objFileNames.length){
+		$("arrow").hide();
 		loader.load(`./models/${objFileNames[objID]}.glb`, function(o){
+			$("arrow").show();
 			if(objFileNames[objID] == '12' || objFileNames[objID] == '1' || objFileNames[objID] == '3'){
 				o.scene.rotation.set(-1.57, 0, 0);
 			}
