@@ -82,10 +82,6 @@ var views = {
 
 // var player = new Tone.Player("./audio.mp3").toMaster();
 var audio = new Audio('./audio.mp3');
-audio.oncanplay = function() {
-	$("#titlescreen").addClass("loaded");
-	$('#loading').hide();
-};
 
 // Tone.Buffer.on('load', function(){
 // 	console.log("loaded");
@@ -244,6 +240,11 @@ function loadFirst(){
 		addObjectToScene(o.scene);
 		renderObject();
 		objID += 1;
+
+		audio.oncanplay = function() {
+			$("#titlescreen").addClass("loaded");
+			$('#loading').hide();
+		};
 		
 		//preload second one
 		$("#arrow").hide();
