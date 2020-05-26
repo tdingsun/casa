@@ -12,6 +12,16 @@ html {
     box-sizing: border-box;
 }
 
+hr {
+    display: block;
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+    margin-inline-start: auto;
+    margin-inline-end: auto;
+    border-top-style: inset;
+    border-top-width: 1px;
+    border-color: white;
+}
 canvas {
     cursor: pointer;
     position: fixed;
@@ -26,9 +36,10 @@ canvas:active {
     width: 100vw;
     height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: black;
+    color: #999;      
     z-index: 1;
 }
 
@@ -41,7 +52,14 @@ canvas:active {
     cursor: pointer;
     text-transform: uppercase;
     pointer-events: all;
-    transition: color 0.5s;    
+    transition: color 0.5s; 
+    color: #999;      
+
+}
+
+#loading {
+    font-size: 25px;
+    padding-top: 20px;
 }
 
 em {
@@ -54,13 +72,16 @@ em {
     color: #666;
 }
 
+.loaded{
+    color: black!important;
+}
+
 #timer {
     position: fixed;
     width: 100vw;
     text-align: center;
     bottom: 5px;
     font-size: 50px;
-    display: none;
     z-index: 1;
 }
 
@@ -84,6 +105,10 @@ em {
     font-size: 50px;
     z-index: 1;
     /* display: none; */
+}
+
+#arrow {
+    display: none;
 }
 
 #moreinfo-btn {
@@ -113,7 +138,7 @@ em {
     bottom: 10px;
     width: 50vw;
     min-width: 380px;
-    max-height: 98vh;
+    max-height: calc(100vh - 20px);
     padding: 10px;
     background-color: #ccc;
     line-height: 1.2;

@@ -18,31 +18,31 @@ var objID = 0;
 var clock = new THREE.Clock();
 var timerInterval;
 var objTimeout;
-var length = 1800; //time in seconds
+var length = 1889; //time in seconds
 
-var objFileNames = [ 'Piedra1', 'Arbol4',   'Monumento4',  'Flor1', 'Piedra2', 'Planta1',    'ARBOL2V2',  'Arbol3','Flor2',   'Monumento2', 'mONUMENTO3', 'Monumento1',      'Monumento5'];
+var objFileNames = ['Flor1', 'Planta1', 'Monumento1', 'Arbol4', 'Arbol3', 'Flor2' , 'Piedra1', '3', '1', '12',  'mONUMENTO3', 'Piedra2', 'ARBOL2V2'];
 objFileNames = shuffle(objFileNames);
 
 var views = {
-	'Monumento4': {
-		"position": [-348.52, 30.126, 300],
-		"rotation": [0.27, -0.74, 0.14]
+	'1': {
+		"position": [8, 38, 29],
+		"rotation": [0.18, -0.57, 0.10]
 	},
 	'Piedra1': {
-		"position": [-4.43, 4.34, 42.96],
+		"position": [-4.43, 4.34, 38],
 		"rotation": [-0.01, -0.21, 0.0]
 	},
-	'Monumento2': {
-		"position": [23.36, 52.50, 22.95],
-		"rotation": [0.35, 0.31, -0.11]
+	'3': {
+		"position": [57, 81, -56],
+		"rotation": [0.25, 0.7, -0.16]
 	},
 	'Flor2': {
-		"position": [-5, 10,  0],
+		"position": [-3.5, 7,  0],
 		"rotation": [-1.57, -0.5, 0]
 	},
 	'Arbol3': {
-		"position": [27.47, 100.83, 29.33],
-		"rotation": [-1.56, -0.01, -0.60]
+		"position": [50, 7.5, -13],
+		"rotation": [0.54, 0.91, -0.44]
 	},
 	'ARBOL2V2': {
 		"position": [-16.64, 10.95, -33.21],
@@ -53,32 +53,37 @@ var views = {
 		"rotation": [-3, 0.52, 3.00]
 	},
 	'Arbol4': {
-		"position": [-2.86, 9.00, -7.50],
-		"rotation": [-3.14, -0.55, -3.14]
+		"position": [12, 9.00, 31],
+		"rotation": [0, 0.72, 0]
 	},
 	'Monumento1': {
-		"position": [-67.90, 40, 85.92],
-		"rotation": [-0.07, -0.63, -0.04]
+		"position": [35, 30, 16],
+		"rotation": [0.19, 0.78, -0.01]
 	},
 	'Planta1': {
-		"position": [45.81, 12, 7.53],
-		"rotation": [-0.47, 1.42, 0.46]
+		"position": [34, 10, 3],
+		"rotation": [-0.06, 1.46, 0.06]
 	},
 	'Piedra2': {
 		"position": [-7.82, 8.5, 64.87],
 		"rotation": [-6.19, -0.15, -9.58]
 	},
-	'Monumento5': {
-		"position": [22.98, 20, 9.89],
-		"rotation": [1.89, 0.66, -2.06]
+	'12': {
+		"position": [11, 56, -33],
+		"rotation": [1.85, 0.68, -2]
 	},
 	'Flor1': {
-		"position": [0, -45, 5.00],
+		"position": [0, -25, 0],
 		"rotation": [1.57, 0, 0]
 	}
 }
 
 var player = new Tone.Player("./audio.mp3").toMaster();
+Tone.Buffer.on('load', function(){
+	console.log("loaded");
+	$("#titlescreen").addClass("loaded");
+	$('#loading').hide();
+});
 var volume = new Tone.Volume(-30);
 var noise = new Tone.Noise('brown').start();
 var autoFilter = new Tone.AutoFilter({
@@ -96,7 +101,7 @@ $('#titlescreen').click(function(){
         Tone.context.resume();
         player.start();
 		$('#title-container').hide();
-		$("#timer").show();
+		$("#arrow").show();
 		timerInterval = setInterval(timer, 1000);
 		objTimeout = setTimeout(loadNextFile, 150000);
 	}
@@ -109,6 +114,11 @@ $('#arrow').click(function(){
 		objTimeout = setTimeout(loadNextFile(), 0);
 	}
 });
+
+// $(document).click(function(){
+// 	console.log(camera.position);
+// 	console.log(camera.rotation);
+// })
 
 function timer(){
 	var minutes = Math.floor((length % (60 * 60)) / (60));
@@ -215,6 +225,10 @@ function init() {
 function loadFirst(){
 	document.getElementById("currcount").innerHTML = 1;
 	loader.load(`./models/${objFileNames[objID]}.glb`, function(o){
+		if(objFileNames[objID] == '12' || objFileNames[objID] == '1' || objFileNames[objID] == '3'){
+			o.scene.rotation.set(-1.57, 0, 0);
+		}
+		
 		addObjectToScene(o.scene);
 		renderObject();
 		objID += 1;
@@ -237,6 +251,9 @@ function loadNextFile(){
 
 	if(objects.length < objFileNames.length){
 		loader.load(`./models/${objFileNames[objID]}.glb`, function(o){
+			if(objFileNames[objID] == '12' || objFileNames[objID] == '1' || objFileNames[objID] == '3'){
+				o.scene.rotation.set(-1.57, 0, 0);
+			}
 			addObjectToScene(o.scene);
 			clearTimeout(objTimeout);
 			objTimeout = setTimeout(loadNextFile, 150000);

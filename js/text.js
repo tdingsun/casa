@@ -6,6 +6,7 @@ var noteID = 0;
 
 $("canvas").on('mousedown', function(){
     $('#moreinfo').hide();
+    $("#moreinfo-btn").text("?");
     synth.triggerAttackRelease(notes[noteID], "2m");
     noteID++;
     if(noteID > notes.length) noteID = 0;
