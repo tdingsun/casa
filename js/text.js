@@ -1,7 +1,7 @@
-var volume = new Tone.Volume(-20);
+var volume = new Tone.Volume(-12);
 var synth = new Tone.PolySynth(7, Tone.Synth).chain(volume, Tone.Master);
 
-var notes = Tone.Frequency("C2").harmonize([0, 3, 7, 10, 12, 15, 19, 22, 24]);
+var notes = Tone.Frequency("G2").harmonize([0, 3, 7, 10, 12, 15, 19, 22, 24]);
 var noteID = 0;
 
 $("canvas").on('mousedown', function(){

@@ -86,7 +86,7 @@ Tone.Buffer.on('load', function(){
 	$("#titlescreen").addClass("loaded");
 	$('#loading').hide();
 });
-var volume = new Tone.Volume(-30);
+var volume = new Tone.Volume(-12);
 var noise = new Tone.Noise('brown').start();
 var autoFilter = new Tone.AutoFilter({
 	"frequency" : "16m",
