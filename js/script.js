@@ -80,11 +80,18 @@ var views = {
 	}
 }
 
+var audioLoaded = false;
+var firstModelLoaded = false;
+
 // var player = new Tone.Player("./audio.mp3").toMaster();
 var audio = new Audio('./audio.mp3');
-// audio.oncanplay = function() {
-
-// };
+audio.oncanplay = function() {
+	audioLoaded = true;
+	if(firstModelLoaded){
+		$("#titlescreen").addClass("loaded");
+		$('#loading').hide();
+	}
+};
 // Tone.Buffer.on('load', function(){
 // 	console.log("loaded");
 
@@ -242,9 +249,12 @@ function loadFirst(){
 		addObjectToScene(o.scene);
 		renderObject();
 		objID += 1;
-
-		$("#titlescreen").addClass("loaded");
-		$('#loading').hide();
+		
+		firstModelLoaded = true;
+		if(audioLoaded){
+			$("#titlescreen").addClass("loaded");
+			$('#loading').hide();
+		}
 		
 		//preload second one
 		$("#arrow").hide();
