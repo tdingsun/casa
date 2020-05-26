@@ -22,21 +22,21 @@ var length = 1889; //time in seconds
 
 var started = false;
 
-var objFileNames = ['Flor1', 'Planta1', 'Monumento1', 'Arbol4', 'Arbol3', 'Flor2' , 'Piedra1', '3', '1', '12',  'mONUMENTO3', 'Piedra2', 'ARBOL2V2'];
+var objFileNames = [  'mONUMENTO3', 'Arbol3', 'Planta1', '12', '1', '3', 'Flor1',  'Monumento1', 'Arbol4',  'Flor2' , 'Piedra1',  'Piedra2', 'ARBOL2V2'];
 objFileNames = shuffle(objFileNames);
 
 var views = {
 	'1': {
-		"position": [8, 38, 29],
-		"rotation": [0.18, -0.57, 0.10]
+		"position": [10, 71, 122],
+		"rotation": [0.24, -0.57, 0.13]
 	},
 	'Piedra1': {
 		"position": [-4.43, 4.34, 38],
 		"rotation": [-0.01, -0.21, 0.0]
 	},
 	'3': {
-		"position": [57, 81, -56],
-		"rotation": [0.25, 0.7, -0.16]
+		"position": [57, 47, 27],
+		"rotation": [0.06, 0.7, -0.04]
 	},
 	'Flor2': {
 		"position": [-3.5, 7,  0],
@@ -71,8 +71,8 @@ var views = {
 		"rotation": [-6.19, -0.15, -9.58]
 	},
 	'12': {
-		"position": [11, 56, -33],
-		"rotation": [1.85, 0.68, -2]
+		"position": [18, 23, 6],
+		"rotation": [2, 0.63, -2.28]
 	},
 	'Flor1': {
 		"position": [0, -25, 0],
@@ -123,10 +123,10 @@ $('#arrow').click(function(){
 	}
 });
 
-// $(document).click(function(){
-// 	console.log(camera.position);
-// 	console.log(camera.rotation);
-// })
+$(document).click(function(){
+	console.log(camera.position);
+	console.log(camera.rotation);
+})
 
 function timer(){
 	var minutes = Math.floor((length % (60 * 60)) / (60));
@@ -233,8 +233,12 @@ function init() {
 function loadFirst(){
 	document.getElementById("currcount").innerHTML = 1;
 	loader.load(`./models/${objFileNames[objID]}.glb`, function(o){
-		if(objFileNames[objID] == '12' || objFileNames[objID] == '1' || objFileNames[objID] == '3'){
-			o.scene.rotation.set(-1.57, 0, 0);
+		if(objFileNames[objID] == 'mONUMENTO3' || objFileNames[objID] == 'Arbol3' || objFileNames[objID] == 'Planta1' ||objFileNames[objID] == '12' || objFileNames[objID] == '1' || objFileNames[objID] == '3'){
+			o.scene.traverse(function(child){
+				if(child.isMesh){
+					child.rotation.set(-1.57, 0, 0);
+				} 
+			});
 		}
 		
 		addObjectToScene(o.scene);
@@ -244,6 +248,13 @@ function loadFirst(){
 		//preload second one
 		$("#arrow").hide();
 		loader.load(`./models/${objFileNames[objID]}.glb`, function(o){
+			if(objFileNames[objID] == 'mONUMENTO3' || objFileNames[objID] == 'Arbol3' || objFileNames[objID] == 'Planta1' ||objFileNames[objID] == '12' || objFileNames[objID] == '1' || objFileNames[objID] == '3'){
+				o.scene.traverse(function(child){
+					if(child.isMesh){
+						child.rotation.set(-1.57, 0, 0);
+					} 
+				});
+			}
 			addObjectToScene(o.scene);
 			if(started){
 				$("#arrow").show();
@@ -265,8 +276,12 @@ function loadNextFile(){
 		$("#arrow").hide();
 		loader.load(`./models/${objFileNames[objID]}.glb`, function(o){
 			$("#arrow").show();
-			if(objFileNames[objID] == '12' || objFileNames[objID] == '1' || objFileNames[objID] == '3'){
-				o.scene.rotation.set(-1.57, 0, 0);
+			if(objFileNames[objID] == 'mONUMENTO3' || objFileNames[objID] == 'Arbol3' || objFileNames[objID] == 'Planta1' ||objFileNames[objID] == '12' || objFileNames[objID] == '1' || objFileNames[objID] == '3'){
+				o.scene.traverse(function(child){
+					if(child.isMesh){
+						child.rotation.set(-1.57, 0, 0);
+					} 
+				});
 			}
 			addObjectToScene(o.scene);
 			clearTimeout(objTimeout);
