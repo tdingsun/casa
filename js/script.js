@@ -257,9 +257,9 @@ function loadNextFile(){
 	}
 
 	if(objects.length < objFileNames.length){
-		$("arrow").hide();
+		$("#arrow").hide();
 		loader.load(`./models/${objFileNames[objID]}.glb`, function(o){
-			$("arrow").show();
+			$("#arrow").show();
 			if(objFileNames[objID] == '12' || objFileNames[objID] == '1' || objFileNames[objID] == '3'){
 				o.scene.rotation.set(-1.57, 0, 0);
 			}
