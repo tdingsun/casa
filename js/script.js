@@ -22,7 +22,7 @@ var length = 1889; //time in seconds
 
 var started = false;
 
-var objFileNames = [  'mONUMENTO3', 'Arbol3', 'Planta1', '12', '1', '3', 'Flor1',  'Monumento1', 'Arbol4',  'Flor2' , 'Piedra1',  'Piedra2', 'ARBOL2V2'];
+var objFileNames = ['ARBOL2V2', 'mONUMENTO3', 'Arbol3', 'Planta1', '12', '1', '3', 'Flor1',  'Monumento1', 'Arbol4',  'Flor2' , 'Piedra1',  'Piedra2'];
 objFileNames = shuffle(objFileNames);
 
 var views = {
@@ -86,6 +86,7 @@ var firstModelLoaded = false;
 // var player = new Tone.Player("./audio.mp3").toMaster();
 var audio = new Audio('./audio.mp3');
 audio.oncanplay = function() {
+	console.log("loaded");
 	audioLoaded = true;
 	if(firstModelLoaded){
 		$("#titlescreen").addClass("loaded");
@@ -255,7 +256,7 @@ function loadFirst(){
 			$("#titlescreen").addClass("loaded");
 			$('#loading').hide();
 		}
-		
+
 		//preload second one
 		$("#arrow").hide();
 		loader.load(`./models/${objFileNames[objID]}.glb`, function(o){
