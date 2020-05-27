@@ -84,6 +84,17 @@ var audioLoaded = false;
 var firstModelLoaded = false;
 
 var audio = new Audio('./audio.mp3');
+audio.onloadedmetadata = function() {
+	if((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) ){
+		audioLoaded = true;
+		console.log("loaded");
+
+		if(firstModelLoaded){
+			$("#titlescreen").addClass("loaded");
+			$('#loading').hide();
+		}
+	}
+};
 audio.oncanplay = function() {
 	console.log("loaded");
 	audioLoaded = true;
@@ -249,7 +260,7 @@ function loadFirst(){
 		
 		firstModelLoaded = true;
 
-		if(audioLoaded || (navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) ){
+		if(audioLoaded){
 			$("#titlescreen").addClass("loaded");
 			$('#loading').hide();
 		}
