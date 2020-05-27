@@ -83,7 +83,6 @@ var views = {
 var audioLoaded = false;
 var firstModelLoaded = false;
 
-// var player = new Tone.Player("./audio.mp3").toMaster();
 var audio = new Audio('./audio.mp3');
 audio.oncanplay = function() {
 	console.log("loaded");
@@ -93,10 +92,7 @@ audio.oncanplay = function() {
 		$('#loading').hide();
 	}
 };
-// Tone.Buffer.on('load', function(){
-// 	console.log("loaded");
 
-// });
 var volume = new Tone.Volume(-12);
 var noise = new Tone.Noise('brown').start();
 var autoFilter = new Tone.AutoFilter({
@@ -252,7 +248,8 @@ function loadFirst(){
 		objID += 1;
 		
 		firstModelLoaded = true;
-		if(audioLoaded){
+
+		if(audioLoaded || (navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) ){
 			$("#titlescreen").addClass("loaded");
 			$('#loading').hide();
 		}
